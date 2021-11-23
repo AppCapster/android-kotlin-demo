@@ -22,7 +22,12 @@ class RoundBarChartRender(
         this.mRadius = mRadius
     }
 
+    override fun initBuffers() {
+        super.initBuffers()
+    }
+
     override fun drawDataSet(c: Canvas, dataSet: IBarDataSet, index: Int) {
+        initBuffers()
         val trans = mChart.getTransformer(dataSet.axisDependency)
         mBarBorderPaint.color = dataSet.barBorderColor
         mBarBorderPaint.strokeWidth = Utils.convertDpToPixel(dataSet.barBorderWidth)
@@ -192,11 +197,23 @@ class RoundBarChartRender(
     private fun getRoundReact(rectF: RectF, isBarPositive: Boolean): Path {
         return if (isBarPositive) {
             roundRect(
-                rectF, mRadius.toFloat(), mRadius.toFloat(), true, true, false, false
+                rectF,
+                mRadius.toFloat(),
+                mRadius.toFloat(),
+                tl = true,
+                tr = true,
+                br = false,
+                bl = false
             )
         } else {
             roundRect(
-                rectF, mRadius.toFloat(), mRadius.toFloat(), false, false, true, true
+                rectF,
+                mRadius.toFloat(),
+                mRadius.toFloat(),
+                tl = false,
+                tr = false,
+                br = true,
+                bl = true
             )
         }
     }

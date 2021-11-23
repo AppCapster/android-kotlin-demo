@@ -109,24 +109,16 @@ class RoundBarChartRender(
                     Shader.TileMode.MIRROR
                 )
             }
-            val path2 = roundRect(
-                RectF(
-                    buffer.buffer[j],
-                    buffer.buffer[j + 1],
-                    buffer.buffer[j + 2],
-                    buffer.buffer[j + 3]
-                ), mRadius.toFloat(), mRadius.toFloat(), true, true, false, false
+            val reactF = RectF(
+                buffer.buffer[j],
+                buffer.buffer[j + 1],
+                buffer.buffer[j + 2],
+                buffer.buffer[j + 3]
             )
-            c.drawPath(path2, mRenderPaint)
+            val isBarPositive = dataSet.getEntryForIndex(j / 4).y > 0
+            val path = getRoundReact(reactF, isBarPositive)
+            c.drawPath(path, mRenderPaint)
             if (drawBorder) {
-                val path = roundRect(
-                    RectF(
-                        buffer.buffer[j],
-                        buffer.buffer[j + 1],
-                        buffer.buffer[j + 2],
-                        buffer.buffer[j + 3]
-                    ), mRadius.toFloat(), mRadius.toFloat(), true, true, false, false
-                )
                 c.drawPath(path, mBarBorderPaint)
             }
             j += 4
@@ -197,4 +189,15 @@ class RoundBarChartRender(
         return path
     }
 
+    private fun getRoundReact(rectF: RectF, isBarPositive: Boolean): Path {
+        return if (isBarPositive) {
+            roundRect(
+                rectF, mRadius.toFloat(), mRadius.toFloat(), true, true, false, false
+            )
+        } else {
+            roundRect(
+                rectF, mRadius.toFloat(), mRadius.toFloat(), false, false, true, true
+            )
+        }
+    }
 }

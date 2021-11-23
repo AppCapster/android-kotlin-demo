@@ -167,7 +167,7 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private fun setCustomRoundedBar() {
         val barChartRender =
             RoundBarChartRender(barChart, barChart.animator, barChart.viewPortHandler)
-//        barChartRender.setRightRadius(25f)
+        barChartRender.setRadius(15)
         barChart.renderer = barChartRender
     }
 }

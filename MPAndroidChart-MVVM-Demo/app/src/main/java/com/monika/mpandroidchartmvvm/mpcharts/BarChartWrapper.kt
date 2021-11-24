@@ -25,7 +25,9 @@ class BarChartWrapper {
         dataSetColors: ArrayList<Int>,
         chatTitle: String
     ): BarChart {
+
         addColorTemplate(dataSetColors)
+
         barChart.setPinchZoom(true)
         barChart.description.text = chatTitle
 
@@ -109,7 +111,7 @@ class BarChartWrapper {
         addColorTemplate(dataSetColors)
         val key = yAxisVal.keys.iterator().next()
         val yValues = yAxisVal[key]
-        val multiBarChartConfigured = configureMultiBarChartAppearance(multiBarChart, chatTitle)
+        val multiBarChartConfigured = configureMultiBarNegativeChartAppearance(multiBarChart)
         if(yValues != null) {
             val data = createChartData(yValues)
 
@@ -140,8 +142,28 @@ class BarChartWrapper {
 
         chart.axisRight.isEnabled = false
 
+        xAxis.axisMinimum = 0f
+        xAxis.axisMaximum = 7f
+        return chart
+    }
+
+    private fun configureMultiBarNegativeChartAppearance(
+        chart: BarChart
+    ): BarChart {
+        chart.setPinchZoom(true)
+
+        chart.description.isEnabled = false
+        chart.axisRight.isEnabled = false
+        chart.extraBottomOffset = 40f
+
         chart.xAxis.axisMinimum = 0f
         chart.xAxis.axisMaximum = 7f
+
+        chart.setDrawBarShadow(false)
+        chart.setDrawValueAboveBar(true)
+        chart.setDrawGridBackground(false)
+
+
         return chart
     }
 

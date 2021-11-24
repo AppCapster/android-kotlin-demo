@@ -101,15 +101,6 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    private fun setChartParams() {
-        barChart.setDrawBarShadow(false)
-        barChart.setDrawValueAboveBar(true)
-        barChart.setDrawGridBackground(false)
-        barChart.extraBottomOffset = 40f
-        barChart.axisRight.isEnabled = false
-        barChart.description.isEnabled = false
-    }
-
     private fun setLegends() {
         val l: Legend = barChart.legend
         l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
@@ -285,47 +276,4 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             )
         multiBarChart.invalidate()
     }
-    /*private fun multiBarChartComponentInit() {
-        *//*MultiBarChart*//*
-
-        val yAxisValName: String = ("Units")
-
-        val xAxisVal = arrayOf(
-            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        )
-        val yAxisVal =
-            floatArrayOf(1.5f, 5.4f, 4f, 8f, 4.3f, 5.1f, 7.6f, 6.7f, 8.9f, 4.8f, 12.1f, 3.5f)
-        val yAxisVal2 =
-            floatArrayOf(-10f, 11f, 13f, 12f, 14f, 9f, 4f, 2f, 8f, 25f, 13f, 2f)
-        val yAxisVal3 = floatArrayOf(2f, 1f, 4f, 5f, 7f, 9f, 4f, 5f, 7f, 6f, 7f, 5f)
-
-        val dataSetColors = ArrayList<Int>()
-        dataSetColors.add(rgb("#C0392B"))
-        dataSetColors.add(rgb("#884EA0"))
-        dataSetColors.add(rgb("#2471A3"))
-        dataSetColors.add(rgb("#1ABC9C"))
-        dataSetColors.add(rgb("#27AE60"))
-        dataSetColors.add(rgb("#F1C40F"))
-        dataSetColors.add(rgb("#F39C12"))
-        dataSetColors.add(rgb("#E67E22"))
-        dataSetColors.add(rgb("#D35400"))
-        dataSetColors.add(rgb("#2E4053"))
-        dataSetColors.add(rgb("#145A32"))
-        dataSetColors.add(rgb("#0B5345"))
-
-        val linkedHashMap = LinkedHashMap<String, FloatArray>()
-        linkedHashMap[yAxisValName + 1] = yAxisVal //String, float[]
-        linkedHashMap[yAxisValName + 2] = yAxisVal2 //String, float[]
-        linkedHashMap[yAxisValName + 3] = yAxisVal3 //String, float[]
-
-        val multiBarChart =
-            BarChartWrapper().multiBarNegativeChart(
-                barChart,
-                xAxisVal,
-                linkedHashMap,
-                dataSetColors,
-                ""
-            )
-        multiBarChart.invalidate()
-    }*/
 }

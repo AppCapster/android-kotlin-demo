@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/bartChart"
+            android:id="@+id/barChart"
             android:layout_width="0dp"
             android:layout_height="240dp"
             android:layout_marginStart="8dp"
@@ -34,7 +34,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:gravity="end"
-            app:layout_constraintTop_toBottomOf="@+id/bartChart">
+            app:layout_constraintTop_toBottomOf="@+id/barChart">
 
             <ImageButton
                 android:id="@+id/btnOrientation"

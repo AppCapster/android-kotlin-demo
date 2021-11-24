@@ -46,7 +46,7 @@ class ChartRemoteDataSource() : ChartDataSource {
 
         val chartModels: ArrayList<ChartModel> = ArrayList<ChartModel>()
 
-        chartModels.add(ChartModel("NegativeBar", getNegativeMultiBarChart()))
+        chartModels.add(ChartModel("NegativeBar", getMultiBarNegativeChart()))
         chartModels.add(ChartModel("MultiBar", getMultiBarChart()))
         chartModels.add(ChartModel("Bar", getBarChart()))
         chartModels.add(ChartModel("StackBar", getStackBarChart()))
@@ -54,7 +54,7 @@ class ChartRemoteDataSource() : ChartDataSource {
         return ChartResponse(200, "Success", chartModels)
     }
 
-    private fun getNegativeMultiBarChart(): BarChartWrapperModel {
+    private fun getMultiBarNegativeChart(): BarChartWrapperModel {
 
         val xAxisVal = arrayOf(
             "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -150,17 +150,4 @@ class ChartRemoteDataSource() : ChartDataSource {
 
         return BarChartWrapperModel("MultiBar", "Multi Bar", xAxisVal, yAxisVal)
     }
-
-    private fun getNegativeBarChart(): ArrayList<BarChartModel> {
-        val barChartModel: ArrayList<BarChartModel> = ArrayList<BarChartModel>()
-
-        barChartModel.add(BarChartModel(0f, -10f, "12-29"))
-        barChartModel.add(BarChartModel(1f, 20f, "12-30"))
-        barChartModel.add(BarChartModel(2f, -30f, "12-31"))
-        barChartModel.add(BarChartModel(3f, -40f, "01-01"))
-        barChartModel.add(BarChartModel(4f, 50f, "01-02"))
-
-        return barChartModel
-    }
-
 }

@@ -1,10 +1,12 @@
 package com.monika.mpandroidchartmvvm.mpcharts
 
+import android.graphics.Color
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -71,8 +73,7 @@ class BarChartWrapper {
         barData.setValueFormatter(LargeValueFormatter())
         barChart.data = barData
 //        barChart.barData.barWidth = barWidth
-        barChart.xAxis.axisMinimum = 0f
-        barChart.xAxis.axisMaximum = 12f
+
         barChart.data.isHighlightEnabled = true
 
         val groupSize = yAxisVal.size
@@ -128,7 +129,7 @@ class BarChartWrapper {
         //set data
         configureMultiBarNegativeChartAppearance(barChart)
 
-        //set xAxis
+        //set Axis
         xAxisConfiguration(barChart, xAxisVal)
 
         val key = yAxisVal.keys.iterator().next()
@@ -148,20 +149,7 @@ class BarChartWrapper {
     ) {
         chart.setPinchZoom(true)
         chart.description.text = chatTitle
-
-        val xAxis = chart.xAxis
-        xAxis.granularity = 1f
-        xAxis.setCenterAxisLabels(true)
-
-        val leftAxis = chart.axisLeft
-//        leftAxis.setDrawGridLines(false)
-        leftAxis.spaceTop = 25f
-        leftAxis.axisMinimum = 0f
-
         chart.axisRight.isEnabled = false
-
-        xAxis.axisMinimum = 0f
-        xAxis.axisMaximum = 7f
     }
 
     private fun configureMultiBarNegativeChartAppearance(
@@ -172,9 +160,6 @@ class BarChartWrapper {
         chart.description.isEnabled = false
         chart.axisRight.isEnabled = false
         chart.extraBottomOffset = 40f
-
-        chart.xAxis.axisMinimum = 0f
-        chart.xAxis.axisMaximum = 7f
 
         chart.setDrawBarShadow(false)
         chart.setDrawValueAboveBar(true)
@@ -364,30 +349,37 @@ class BarChartWrapper {
 
     private fun xAxisConfigSingleBar(barChart: BarChart, xAxisVal: Array<String>) {
         val xAxis = barChart.xAxis
+
         xAxis.granularity = 1f
         xAxis.isGranularityEnabled = true
+
         xAxis.textSize = 9f
         xAxis.labelCount = 12
+
         if (xAxisVal.size > 12)
             xAxis.labelCount = xAxisVal.size / 3
+
         xAxis.mAxisMaximum = 12f
         xAxis.position = XAxis.XAxisPosition.TOP
         xAxis.valueFormatter = IndexAxisValueFormatter(xAxisVal)
     }
 
-    private fun xAxisConfiguration(chart: BarChart, xAxisValues: Array<String>) {
+    private fun xAxisConfiguration(chart: BarChart, xAxisVal: Array<String>) {
         val xAxis = chart.xAxis
-        xAxis.position = XAxis.XAxisPosition.TOP
-        xAxis.valueFormatter = IndexAxisValueFormatter(xAxisValues)
+
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.valueFormatter = IndexAxisValueFormatter(xAxisVal)
         xAxis.granularity = 1f
         xAxis.isGranularityEnabled = true
+
         xAxis.setCenterAxisLabels(true)
-        xAxis.textSize = 9f
-        xAxis.labelCount = 12
-        xAxis.mAxisMaximum = 12f
+        xAxis.setDrawGridLines(false)
         xAxis.setAvoidFirstLastClipping(true)
-        xAxis.spaceMin = 4f
-        xAxis.spaceMax = 4f
+
+        xAxis.labelCount = xAxisVal.size
+
+        xAxis.axisMinimum = 0f
+        xAxis.mAxisMaximum = xAxisVal.size.toFloat()
     }
 
     private fun addColorTemplate(colors: ArrayList<Int>) {

@@ -25,23 +25,14 @@ import kotlin.collections.ArrayList
 
 class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    private val barChart: BarChart = view.findViewById(R.id.bartChart)
+    private val barChart: BarChart = view.findViewById(R.id.barChart)
     private val btnOrientation: ImageButton = view.findViewById(R.id.btnOrientation)
 
     val dataSetColors = ArrayList<Int>()
 
     fun bind(chartModel: ChartModel, listener: (ChartModel) -> Unit) {
 
-        /*textViewName.text = chartModel.name
-        Glide.with(imageView.context).load(chartModel.photo).into(imageView)*/
         setClickListener(listener, chartModel)
-        /*
-        setLegends()
-        setXAxis()
-        setYAxis()
-        setData(chartModel.chartData)
-        setMarkerView(view)
-        setCustomRoundedBar()*/
 
         dataSetColors.add(rgb("#C0392B"))
         dataSetColors.add(rgb("#884EA0"))
@@ -59,28 +50,28 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         if (chartModel.chartData is BarChartWrapperModel) {
             when (chartModel.chartType) {
                 "NegativeBar" -> {
-                    setNegativeMultiBartData(
+                    setMultiBarNegativeData(
                         chartModel.chartType,
                         chartModel.chartData.xAxisVal,
                         chartModel.chartData.yAxisVal
                     )
                 }
                 "MultiBar" -> {
-                    setMultiBartData(
+                    setMultiBarData(
                         chartModel.chartType,
                         chartModel.chartData.xAxisVal,
                         chartModel.chartData.yAxisVal
                     )
                 }
                 "Bar" -> {
-                    setBartData(
+                    setBarData(
                         chartModel.chartType,
                         chartModel.chartData.xAxisVal,
                         chartModel.chartData.yAxisVal
                     )
                 }
                 "StackBar" -> {
-                    setStackBartData(
+                    setStackBarData(
                         chartModel.chartType,
                         chartModel.chartData.xAxisVal,
                         chartModel.chartData.yAxisVal
@@ -112,34 +103,6 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         l.xOffset = 10f
         l.yEntrySpace = 0f
         l.textSize = 8f
-    }
-
-    private fun setXAxis() {
-        val xAxis: XAxis = barChart.xAxis
-        xAxis.position = XAxisPosition.BOTTOM
-
-        xAxis.textColor = Color.LTGRAY
-        xAxis.textSize = 13f
-        xAxis.labelCount = 5
-        xAxis.setCenterAxisLabels(true)
-        xAxis.granularity = 1f
-        xAxis.setDrawGridLines(false)
-        /*xAxis.valueFormatter = object : ValueFormatter() {
-            override fun getFormattedValue(value: Float, axis: AxisBase): String {
-                return data1.get(Math.min(Math.max(value.toInt(), 0), data1.size - 1)).xAxisValue
-            }
-        }*/
-    }
-
-    private fun setYAxis() {
-        val left: YAxis = barChart.axisLeft
-        left.spaceTop = 25f
-        left.spaceBottom = 25f
-
-        left.setDrawZeroLine(true) // draw a zero line
-
-        left.zeroLineColor = Color.GRAY
-        left.zeroLineWidth = 0.7f
     }
 
     private fun setData(data1: List<BarChartModel>) {
@@ -209,7 +172,7 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         barChart.renderer = barChartRender
     }
 
-    private fun setNegativeMultiBartData(
+    private fun setMultiBarNegativeData(
         chartTitle: String,
         xAxisVal: Array<String>,
         yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>
@@ -225,7 +188,7 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         multiBarChart.invalidate()
     }
 
-    private fun setMultiBartData(
+    private fun setMultiBarData(
         chartTitle: String,
         xAxisVal: Array<String>,
         yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>
@@ -240,7 +203,7 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         multiBarChart.invalidate()
     }
 
-    private fun setBartData(
+    private fun setBarData(
         chartTitle: String,
         xAxisVal: Array<String>,
         yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>
@@ -255,7 +218,7 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         multiBarChart.invalidate()
     }
 
-    private fun setStackBartData(
+    private fun setStackBarData(
         chartTitle: String,
         xAxisVal: Array<String>,
         yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>

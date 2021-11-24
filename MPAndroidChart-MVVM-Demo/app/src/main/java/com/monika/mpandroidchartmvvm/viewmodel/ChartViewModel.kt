@@ -33,10 +33,6 @@ class ChartViewModel(private val repository: ChartRepository) : ViewModel() {
     }
      */
 
-    fun onChartClickAction(it: ChartModel) {
-
-    }
-
     fun loadCharts() {
         _isViewLoading.value = true
         repository.fetchCharts(object : OperationCallback<ChartModel> {
@@ -55,6 +51,10 @@ class ChartViewModel(private val repository: ChartRepository) : ViewModel() {
                 }
             }
         })
+    }
+
+    fun onChartClickAction(it: ChartModel) {
+        print(it.chartType)
     }
 
 }

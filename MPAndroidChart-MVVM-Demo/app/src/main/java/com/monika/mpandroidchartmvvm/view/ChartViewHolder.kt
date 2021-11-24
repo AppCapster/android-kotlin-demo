@@ -1,6 +1,8 @@
 package com.monika.mpandroidchartmvvm.view
 
+import android.app.Activity
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.view.View
 import android.widget.ImageButton
@@ -23,7 +25,9 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private val barChart: BarChart = view.findViewById(R.id.barChart)
     private val btnOrientation: ImageButton = view.findViewById(R.id.btnOrientation)
+    private val btnShare: ImageButton = view.findViewById(R.id.btnShare)
     private val view = view
+    private var isPortrait = false
 
     private val dataSetColors = ArrayList<Int>()
 
@@ -78,7 +82,15 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             }
         }
 
-
+        btnOrientation.setOnClickListener {
+            val activity = view.context as Activity
+            if (isPortrait) {
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            } else {
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            }
+            isPortrait = !isPortrait
+        }
     }
 
     private fun setClickListener(
@@ -88,60 +100,6 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         itemView.setOnClickListener {
             listener(chartModel)
         }
-    }
-
-    private fun setData(data1: List<BarChartModel>) {
-        val values1 = ArrayList<BarEntry>()
-        val values2 = ArrayList<BarEntry>()
-
-        val colors: MutableList<Int> = ArrayList()
-        val green = Color.rgb(110, 190, 102)
-        val red = Color.rgb(211, 74, 88)
-
-        for (i in data1.indices) {
-            val d: BarChartModel = data1[i]
-            val entry1 = BarEntry(d.xValue, d.yValue)
-            values1.add(entry1)
-            val entry2 = BarEntry(d.xValue, d.yValue + 5)
-            values2.add(entry2)
-
-            // specific colors
-            if (d.yValue >= 0) colors.add(red) else colors.add(green)
-        }
-        val set1: BarDataSet
-        val set2: BarDataSet
-        if (barChart.data != null &&
-            barChart.data.dataSetCount > 0
-        ) {
-            set1 = barChart.data.getDataSetByIndex(0) as BarDataSet
-            set2 = barChart.data.getDataSetByIndex(1) as BarDataSet
-
-            set1.values = values1
-            set2.values = values2
-            barChart.data.notifyDataChanged()
-            barChart.notifyDataSetChanged()
-        } else {
-            set1 = BarDataSet(values1, "Call")
-            set1.color = Color.RED
-            set2 = BarDataSet(values2, "Put")
-            set2.color = Color.BLUE
-            val data = BarData(set1, set2)
-            data.setValueTextSize(13f)
-//            data.setValueTypeface(tfRegular);
-//            data.setValueFormatter(ValueFormatter())
-            data.barWidth = 0.8f
-            barChart.data = data
-        }
-        set1.setDrawValues(false)
-        set2.setDrawValues(false)
-        val groupSpace = 0.3f
-        val barSpace = 0.03f // x4 DataSet
-        val barWidth = 0.2f // x4 DataSet
-
-        barChart.barData.barWidth = barWidth
-        barChart.groupBars(0f, groupSpace, barSpace)
-        barChart.setVisibleXRangeMaximum(5f)
-        barChart.invalidate()
     }
 
     private fun setMultiBarNegativeData(

@@ -3,38 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:ignore="Overdraw">
 
     <TextView
         android:id="@+id/tvCall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="12sp"
-        android:textColor="@android:color/white"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
         android:layout_margin="5dp"
         android:background="@color/barChartMarkerViewLabel1Background"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:ellipsize="end"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:singleLine="true"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/barChartMarkerViewLabel1TextColor"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tvPut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="12sp"
-        android:textColor="@android:color/white"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
         android:layout_marginStart="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/barChartMarkerViewLabel2Background"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:ellipsize="end"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:singleLine="true"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/barChartMarkerViewLabel2TextColor"
+        android:textSize="12sp" />
 </LinearLayout>

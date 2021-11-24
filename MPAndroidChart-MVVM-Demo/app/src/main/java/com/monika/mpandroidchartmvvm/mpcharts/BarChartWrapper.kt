@@ -168,14 +168,11 @@ class BarChartWrapper {
         chart: BarChart
     ) {
         chart.setPinchZoom(true)
+        chart.setDrawGridBackground(false)
 
         chart.description.isEnabled = false
         chart.axisRight.isEnabled = false
         chart.extraBottomOffset = 10f
-
-        chart.setDrawBarShadow(false)
-        chart.setDrawValueAboveBar(true)
-        chart.setDrawGridBackground(false)
     }
 
     private fun prepareChartData(
@@ -212,7 +209,7 @@ class BarChartWrapper {
                 }
                 val set = BarDataSet(yEntry, yLabelKey)
                 set.setColors(colors[colorCount])
-
+                set.setDrawValues(false)
                 //Reset count and increment Count
                 colorCount = colorCountOperation(colorCount)
                 dataSets.add(set)

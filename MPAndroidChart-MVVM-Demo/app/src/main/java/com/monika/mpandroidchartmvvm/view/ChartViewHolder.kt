@@ -35,7 +35,7 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         /*textViewName.text = chartModel.name
         Glide.with(imageView.context).load(chartModel.photo).into(imageView)*/
         setClickListener(listener, chartModel)
-        /*setChartParams()
+        /*
         setLegends()
         setXAxis()
         setYAxis()
@@ -197,16 +197,9 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     }
 
     private fun setMarkerView(view: View) {
-        // create a custom MarkerView (extend MarkerView) and specify the layout
-        // to use for it
-
-        // create a custom MarkerView (extend MarkerView) and specify the layout
-        // to use for it
         val mv = BarChartMarkerView(view.context, R.layout.barchart_marker_view)
         mv.chartView = barChart // For bounds control
-
         barChart.marker = mv // Set the marker to the chart
-
     }
 
     private fun setCustomRoundedBar() {

@@ -26,108 +26,126 @@ class BarChartWrapper {
         chatTitle: String
     ): BarChart {
 
+        //set color
         addColorTemplate(dataSetColors)
 
-        barChart.setPinchZoom(true)
-        barChart.description.text = chatTitle
-
+        //set data
         val key = yAxisVal.keys.iterator().next()
         val data = yAxisVal[key]?.let { createChartData(it) }
+
+        //set xAxis
         xAxisConfigSingleBar(barChart, xAxisVal)
 
         barChart.data = data
         barChart.setFitBars(true) // make the x-axis fit exactly all bars
+
+        // set bar label
         legend(barChart)
+
         return barChart
     }
 
     fun barStackChart(
-        barChartView: BarChart,
+        barChart: BarChart,
         xAxisVal: Array<String>,
         yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>,
         dataSetColors: ArrayList<Int>,
         chartTitle: String
     ): BarChart {
 
+        //set color
         addColorTemplate(dataSetColors)
+
+        //set data
         val (barData, labelHm) = createStackBarChartData(yAxisVal)
-        configureMultiBarChartAppearance(barChartView, chartTitle)
+        configureMultiBarChartAppearance(barChart, chartTitle)
+
+        //set xAxis
+        xAxisConfiguration(barChart, xAxisVal)
+
         // set bar label
-        val legend = legend(barChartView)
+        val legend = legend(barChart)
         legendEntry(legend, labelHm)
 
-        xAxisConfiguration(barChartView, xAxisVal)
 
         barData.setValueFormatter(LargeValueFormatter())
-        barChartView.data = barData
-//        barChartView.barData.barWidth = barWidth
-        barChartView.xAxis.axisMinimum = 0f
-        barChartView.xAxis.axisMaximum = 12f
-        barChartView.data.isHighlightEnabled = true
+        barChart.data = barData
+//        barChart.barData.barWidth = barWidth
+        barChart.xAxis.axisMinimum = 0f
+        barChart.xAxis.axisMaximum = 12f
+        barChart.data.isHighlightEnabled = true
 
         val groupSize = yAxisVal.size
         val barSpace = 0.01f
         val barWidth = 0.9f / groupSize // x groupSize dataSet
-        barChartView.barData.barWidth = barWidth
+        barChart.barData.barWidth = barWidth
         val groupEvaluatedSpace = 1f - (barSpace + barWidth) * groupSize
-        barChartView.groupBars(0f, groupEvaluatedSpace, barSpace)
+        barChart.groupBars(0f, groupEvaluatedSpace, barSpace)
 
-        barChartView.data = barData
-        return barChartView
+        barChart.data = barData
+
+        return barChart
     }
 
     fun multiBarChart(
-        multiBarChart: BarChart,
+        barChart: BarChart,
         xAxisVal: Array<String>,
         yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>,
         dataSetColors: ArrayList<Int>,
         chatTitle: String
     ): BarChart {
 
+        //set color
         addColorTemplate(dataSetColors)
+
+        //set data
+        configureMultiBarChartAppearance(barChart, chatTitle)
+
+        //set xAxis
+        xAxisConfiguration(barChart, xAxisVal)
+
         val key = yAxisVal.keys.iterator().next()
         val yValues = yAxisVal[key]
-        val multiBarChartConfigured = configureMultiBarChartAppearance(multiBarChart, chatTitle)
-        if(yValues != null) {
+        if (yValues != null) {
             val data = createChartData(yValues)
-
-            return prepareChartData(
-                data,
-                xAxisVal,
-                multiBarChartConfigured, yValues
-            )
+            return prepareChartData(data, barChart, yValues)
         }
-        return multiBarChartConfigured
+
+        return barChart
     }
 
     fun multiBarNegativeChart(
-        multiBarChart: BarChart,
+        barChart: BarChart,
         xAxisVal: Array<String>,
         yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>,
         dataSetColors: ArrayList<Int>,
         chatTitle: String
     ): BarChart {
 
+        //set color
         addColorTemplate(dataSetColors)
+
+        //set data
+        configureMultiBarNegativeChartAppearance(barChart)
+
+        //set xAxis
+        xAxisConfiguration(barChart, xAxisVal)
+
         val key = yAxisVal.keys.iterator().next()
         val yValues = yAxisVal[key]
-        val multiBarChartConfigured = configureMultiBarNegativeChartAppearance(multiBarChart)
-        if(yValues != null) {
+        if (yValues != null) {
             val data = createChartData(yValues)
-
-            return prepareChartData(
-                data,
-                xAxisVal,
-                multiBarChartConfigured, yValues
-            )
+            return prepareChartData(data, barChart, yValues)
         }
-        return multiBarChartConfigured
+
+        return barChart
     }
+
     /* */
     private fun configureMultiBarChartAppearance(
         chart: BarChart,
         chatTitle: String
-    ): BarChart {
+    ) {
         chart.setPinchZoom(true)
         chart.description.text = chatTitle
 
@@ -144,12 +162,11 @@ class BarChartWrapper {
 
         xAxis.axisMinimum = 0f
         xAxis.axisMaximum = 7f
-        return chart
     }
 
     private fun configureMultiBarNegativeChartAppearance(
         chart: BarChart
-    ): BarChart {
+    ) {
         chart.setPinchZoom(true)
 
         chart.description.isEnabled = false
@@ -162,14 +179,10 @@ class BarChartWrapper {
         chart.setDrawBarShadow(false)
         chart.setDrawValueAboveBar(true)
         chart.setDrawGridBackground(false)
-
-
-        return chart
     }
 
     private fun prepareChartData(
         data: BarData?,
-        xAxisValues: Array<String>,
         chart: BarChart,
         yAxisVal: LinkedHashMap<String, FloatArray>
     ): BarChart {
@@ -178,9 +191,8 @@ class BarChartWrapper {
         val barWidth = 0.9f / groupSize // x groupSize dataSet
 
         chart.data = data
-        xAxisConfiguration(chart, xAxisValues)
-
         chart.barData.barWidth = barWidth
+
         val groupEvaluatedSpace = 1f - (barSpace + barWidth) * groupSize
         chart.groupBars(0f, groupEvaluatedSpace, barSpace)
         legend(chart)
@@ -207,39 +219,6 @@ class BarChartWrapper {
             }
         }
         return BarData(dataSets)
-    }
-
-    private fun legend(barChart: BarChart): Legend {
-        val legend = barChart.legend
-        legend.isEnabled = true
-        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-        legend.form = Legend.LegendForm.SQUARE
-        legend.formSize = 9.0f
-        legend.textSize = 11.0f
-        legend.xEntrySpace = 5.0f
-        barChart.animateX(2000, Easing.EaseInOutQuart)
-        barChart.animateY(2500, Easing.EaseInOutQuart)
-        return legend
-    }
-
-    private fun legendEntry(
-        legend: Legend, labelHm: HashMap<String, Int>
-    ) {
-        //        Customize Bar Chart Legends using Legend Entry
-        val legendEntries = arrayListOf<LegendEntry>()
-        for ((key, value) in labelHm) {
-            legendEntries.add(
-                LegendEntry(
-                    key,
-                    Legend.LegendForm.SQUARE,
-                    8f,
-                    8f,
-                    null,
-                    value
-                )
-            )
-        }
-        legend.setCustom(legendEntries)
     }
 
     private fun createStackBarChartData(
@@ -352,11 +331,38 @@ class BarChartWrapper {
         return Pair(BarData(dataSets), legendLabelHm)
     }
 
+    private fun legend(barChart: BarChart): Legend {
+        val legend = barChart.legend
+        legend.isEnabled = true
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+        legend.form = Legend.LegendForm.SQUARE
+        legend.formSize = 9.0f
+        legend.textSize = 11.0f
+        legend.xEntrySpace = 5.0f
+        barChart.animateX(2000, Easing.EaseInOutQuart)
+        barChart.animateY(2500, Easing.EaseInOutQuart)
+        return legend
+    }
 
-    private fun xAxisConfigSingleBar(
-        barChart: BarChart,
-        xAxisVal: Array<String>
-    ) {
+    private fun legendEntry(legend: Legend, labelHm: HashMap<String, Int>) {
+        //        Customize Bar Chart Legends using Legend Entry
+        val legendEntries = arrayListOf<LegendEntry>()
+        for ((key, value) in labelHm) {
+            legendEntries.add(
+                LegendEntry(
+                    key,
+                    Legend.LegendForm.SQUARE,
+                    8f,
+                    8f,
+                    null,
+                    value
+                )
+            )
+        }
+        legend.setCustom(legendEntries)
+    }
+
+    private fun xAxisConfigSingleBar(barChart: BarChart, xAxisVal: Array<String>) {
         val xAxis = barChart.xAxis
         xAxis.granularity = 1f
         xAxis.isGranularityEnabled = true
@@ -367,6 +373,21 @@ class BarChartWrapper {
         xAxis.mAxisMaximum = 12f
         xAxis.position = XAxis.XAxisPosition.TOP
         xAxis.valueFormatter = IndexAxisValueFormatter(xAxisVal)
+    }
+
+    private fun xAxisConfiguration(chart: BarChart, xAxisValues: Array<String>) {
+        val xAxis = chart.xAxis
+        xAxis.position = XAxis.XAxisPosition.TOP
+        xAxis.valueFormatter = IndexAxisValueFormatter(xAxisValues)
+        xAxis.granularity = 1f
+        xAxis.isGranularityEnabled = true
+        xAxis.setCenterAxisLabels(true)
+        xAxis.textSize = 9f
+        xAxis.labelCount = 12
+        xAxis.mAxisMaximum = 12f
+        xAxis.setAvoidFirstLastClipping(true)
+        xAxis.spaceMin = 4f
+        xAxis.spaceMax = 4f
     }
 
     private fun addColorTemplate(colors: ArrayList<Int>) {
@@ -385,23 +406,8 @@ class BarChartWrapper {
         return colorCount1
     }
 
-
-    private fun xAxisConfiguration(
-        chart: BarChart,
-        xAxisValues: Array<String>
-    ) {
-        val xAxis = chart.xAxis
-        xAxis.position = XAxis.XAxisPosition.TOP
-        xAxis.valueFormatter = IndexAxisValueFormatter(xAxisValues)
-        xAxis.granularity = 1f
-        xAxis.isGranularityEnabled = true
-        xAxis.setCenterAxisLabels(true)
-        xAxis.textSize = 9f
-        xAxis.labelCount = 12
-        xAxis.mAxisMaximum = 12f
-        xAxis.setAvoidFirstLastClipping(true)
-        xAxis.spaceMin = 4f
-        xAxis.spaceMax = 4f
-    }
-
+/*
+    barChart.setPinchZoom(true)
+    barChart.description.text = chatTitle
+*/
 }

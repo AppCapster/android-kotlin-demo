@@ -1,18 +1,20 @@
 package com.monika.mpandroidchartmvvm.mpcharts
 
-import android.graphics.Color
+import android.content.Context
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.LargeValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import com.monika.mpandroidchartmvvm.R
+import com.monika.mpandroidchartmvvm.view.custom.BarChartMarkerView
+import com.monika.mpandroidchartmvvm.view.custom.RoundBarChartRender
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -69,7 +71,6 @@ class BarChartWrapper {
         val legend = legend(barChart)
         legendEntry(legend, labelHm)
 
-
         barData.setValueFormatter(LargeValueFormatter())
         barChart.data = barData
 //        barChart.barData.barWidth = barWidth
@@ -105,6 +106,9 @@ class BarChartWrapper {
         //set xAxis
         xAxisConfiguration(barChart, xAxisVal)
 
+        // set bar label
+        legend(barChart)
+
         val key = yAxisVal.keys.iterator().next()
         val yValues = yAxisVal[key]
         if (yValues != null) {
@@ -120,7 +124,8 @@ class BarChartWrapper {
         xAxisVal: Array<String>,
         yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>,
         dataSetColors: ArrayList<Int>,
-        chatTitle: String
+        chatTitle: String,
+        context: Context
     ): BarChart {
 
         //set color
@@ -131,6 +136,13 @@ class BarChartWrapper {
 
         //set Axis
         xAxisConfiguration(barChart, xAxisVal)
+
+        // set bar label
+        legend(barChart)
+
+        //set views
+        setMarkerView(barChart, context)
+        setCustomRoundedBar(barChart)
 
         val key = yAxisVal.keys.iterator().next()
         val yValues = yAxisVal[key]
@@ -159,7 +171,7 @@ class BarChartWrapper {
 
         chart.description.isEnabled = false
         chart.axisRight.isEnabled = false
-        chart.extraBottomOffset = 40f
+        chart.extraBottomOffset = 10f
 
         chart.setDrawBarShadow(false)
         chart.setDrawValueAboveBar(true)
@@ -172,15 +184,15 @@ class BarChartWrapper {
         yAxisVal: LinkedHashMap<String, FloatArray>
     ): BarChart {
         val groupSize = yAxisVal.size
-        val barSpace = 0.01f
-        val barWidth = 0.9f / groupSize // x groupSize dataSet
+        val barSpace = 0.03f
+        val barWidth = 0.5f / groupSize // x groupSize dataSet
 
         chart.data = data
         chart.barData.barWidth = barWidth
 
         val groupEvaluatedSpace = 1f - (barSpace + barWidth) * groupSize
         chart.groupBars(0f, groupEvaluatedSpace, barSpace)
-        legend(chart)
+
         return chart
     }
 
@@ -190,17 +202,20 @@ class BarChartWrapper {
         var colorCount = 0
         val dataSets: ArrayList<IBarDataSet> = ArrayList()
         for (yLabelKey in yValue.keys) {
+
             val yEntry = ArrayList<BarEntry>()
             val floatyValue: FloatArray? = yValue[yLabelKey]
+
             if (floatyValue != null && floatyValue.isNotEmpty()) {
                 for (j in floatyValue.indices) {
                     yEntry.add(BarEntry(j.toFloat(), floatyValue[j]))
                 }
-                val set1 = BarDataSet(yEntry, yLabelKey)
-                set1.setColors(colors[colorCount])
+                val set = BarDataSet(yEntry, yLabelKey)
+                set.setColors(colors[colorCount])
+
                 //Reset count and increment Count
                 colorCount = colorCountOperation(colorCount)
-                dataSets.add(set1)
+                dataSets.add(set)
             }
         }
         return BarData(dataSets)
@@ -318,14 +333,11 @@ class BarChartWrapper {
 
     private fun legend(barChart: BarChart): Legend {
         val legend = barChart.legend
+
         legend.isEnabled = true
-        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-        legend.form = Legend.LegendForm.SQUARE
-        legend.formSize = 9.0f
-        legend.textSize = 11.0f
-        legend.xEntrySpace = 5.0f
         barChart.animateX(2000, Easing.EaseInOutQuart)
-        barChart.animateY(2500, Easing.EaseInOutQuart)
+        barChart.animateY(2000, Easing.EaseInOutQuart)
+
         return legend
     }
 
@@ -398,8 +410,16 @@ class BarChartWrapper {
         return colorCount1
     }
 
-/*
-    barChart.setPinchZoom(true)
-    barChart.description.text = chatTitle
-*/
+    private fun setMarkerView(chart: BarChart, context: Context) {
+        val mv = BarChartMarkerView(context, R.layout.barchart_marker_view)
+        mv.chartView = chart // For bounds control
+        chart.marker = mv // Set the marker to the chart
+    }
+
+    private fun setCustomRoundedBar(chart: BarChart) {
+        val barChartRender =
+            RoundBarChartRender(chart, chart.animator, chart.viewPortHandler)
+        barChartRender.setRadius(15)
+        chart.renderer = barChartRender
+    }
 }

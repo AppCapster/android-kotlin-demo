@@ -1,14 +1,11 @@
 package com.monika.mpandroidchartmvvm.view
 
+import android.content.Context
 import android.graphics.Color
 import android.view.View
 import android.widget.ImageButton
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.XAxis.XAxisPosition
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -18,8 +15,6 @@ import com.monika.mpandroidchartmvvm.model.BarChartModel
 import com.monika.mpandroidchartmvvm.model.BarChartWrapperModel
 import com.monika.mpandroidchartmvvm.model.ChartModel
 import com.monika.mpandroidchartmvvm.mpcharts.BarChartWrapper
-import com.monika.mpandroidchartmvvm.view.custom.BarChartMarkerView
-import com.monika.mpandroidchartmvvm.view.custom.RoundBarChartRender
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,6 +22,7 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private val barChart: BarChart = view.findViewById(R.id.barChart)
     private val btnOrientation: ImageButton = view.findViewById(R.id.btnOrientation)
+    private val view = view
 
     val dataSetColors = ArrayList<Int>()
 
@@ -53,7 +49,7 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                     setMultiBarNegativeData(
                         chartModel.chartType,
                         chartModel.chartData.xAxisVal,
-                        chartModel.chartData.yAxisVal
+                        chartModel.chartData.yAxisVal, view.context
                     )
                 }
                 "MultiBar" -> {
@@ -90,19 +86,6 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         itemView.setOnClickListener {
             listener(chartModel)
         }
-    }
-
-    private fun setLegends() {
-        val l: Legend = barChart.legend
-        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-        l.orientation = Legend.LegendOrientation.HORIZONTAL
-        l.setDrawInside(true)
-
-        l.yOffset = 0f
-        l.xOffset = 10f
-        l.yEntrySpace = 0f
-        l.textSize = 8f
     }
 
     private fun setData(data1: List<BarChartModel>) {
@@ -159,23 +142,11 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         barChart.invalidate()
     }
 
-    private fun setMarkerView(view: View) {
-        val mv = BarChartMarkerView(view.context, R.layout.barchart_marker_view)
-        mv.chartView = barChart // For bounds control
-        barChart.marker = mv // Set the marker to the chart
-    }
-
-    private fun setCustomRoundedBar() {
-        val barChartRender =
-            RoundBarChartRender(barChart, barChart.animator, barChart.viewPortHandler)
-        barChartRender.setRadius(15)
-        barChart.renderer = barChartRender
-    }
-
     private fun setMultiBarNegativeData(
         chartTitle: String,
         xAxisVal: Array<String>,
-        yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>
+        yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>,
+        context: Context
     ) {
         val multiBarChart =
             BarChartWrapper().multiBarNegativeChart(
@@ -183,7 +154,8 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 xAxisVal,
                 yAxisVal,
                 dataSetColors,
-                chartTitle
+                chartTitle,
+                context
             )
         multiBarChart.invalidate()
     }

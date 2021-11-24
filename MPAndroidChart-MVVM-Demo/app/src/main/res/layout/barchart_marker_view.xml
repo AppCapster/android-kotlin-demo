@@ -4,7 +4,7 @@
     android:layout_width="60dp"
     android:layout_height="60dp"
     android:orientation="vertical"
-    android:background="@color/black"
+    android:background="@color/white"
     tools:ignore="Overdraw">
 
     <TextView

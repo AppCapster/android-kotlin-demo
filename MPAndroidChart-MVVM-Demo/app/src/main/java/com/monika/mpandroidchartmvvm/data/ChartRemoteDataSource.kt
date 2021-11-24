@@ -60,9 +60,9 @@ class ChartRemoteDataSource() : ChartDataSource {
             "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
         )
         val yAxisVal1 =
-            floatArrayOf(-1.5f, 5.4f, -4f, 8f, -4.3f, 5.1f, -7.6f, 6.7f, 8.9f, -4.8f, 12.1f, 3.5f)
+            floatArrayOf(-1.5f, 5.4f, -4f, 8f, -4.3f, 5.1f, 7.6f, 6.7f, 8.9f, -4.8f, 12.1f, 3.5f)
         val yAxisVal2 =
-            floatArrayOf(-10f, 11f, -13f, 12f, -14f, 9f, 4f, 2f, 8f, 25f, 13f, -2f)
+            floatArrayOf(-10f, 11f, -13f, 12f, -14f, 9f, 4f, 2f, 8f, -25f, 13f, 2f)
 
         val linkedHashMap = LinkedHashMap<String, FloatArray>()
         linkedHashMap["Set"] = yAxisVal1 //String, float[]

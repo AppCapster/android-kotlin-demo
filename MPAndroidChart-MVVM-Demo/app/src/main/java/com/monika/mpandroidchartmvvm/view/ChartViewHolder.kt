@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.view.View
 import android.widget.ImageButton
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
@@ -24,14 +25,15 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val btnOrientation: ImageButton = view.findViewById(R.id.btnOrientation)
     private val view = view
 
-    val dataSetColors = ArrayList<Int>()
+    private val dataSetColors = ArrayList<Int>()
 
     fun bind(chartModel: ChartModel, listener: (ChartModel) -> Unit) {
 
         setClickListener(listener, chartModel)
 
-        dataSetColors.add(rgb("#C0392B"))
-        dataSetColors.add(rgb("#884EA0"))
+        dataSetColors.add(ContextCompat.getColor(view.context, R.color.barChartMarkerViewLabel1TextColor))
+        dataSetColors.add(ContextCompat.getColor(view.context, R.color.barChartMarkerViewLabel2TextColor))
+
         dataSetColors.add(rgb("#2471A3"))
         dataSetColors.add(rgb("#1ABC9C"))
         dataSetColors.add(rgb("#27AE60"))

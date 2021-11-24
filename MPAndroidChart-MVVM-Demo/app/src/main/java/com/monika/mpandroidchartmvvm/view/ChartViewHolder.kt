@@ -12,30 +12,84 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.utils.ColorTemplate.rgb
 import com.monika.mpandroidchartmvvm.R
 import com.monika.mpandroidchartmvvm.model.BarChartModel
+import com.monika.mpandroidchartmvvm.model.BarChartWrapperModel
 import com.monika.mpandroidchartmvvm.model.ChartModel
+import com.monika.mpandroidchartmvvm.mpcharts.BarChartWrapper
 import com.monika.mpandroidchartmvvm.view.custom.BarChartMarkerView
 import com.monika.mpandroidchartmvvm.view.custom.RoundBarChartRender
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private val barChart: BarChart = view.findViewById(R.id.bartChart)
     private val btnOrientation: ImageButton = view.findViewById(R.id.btnOrientation)
-    private val view = view
+
+    val dataSetColors = ArrayList<Int>()
+
     fun bind(chartModel: ChartModel, listener: (ChartModel) -> Unit) {
 
         /*textViewName.text = chartModel.name
         Glide.with(imageView.context).load(chartModel.photo).into(imageView)*/
         setClickListener(listener, chartModel)
-        setChartParams()
+        /*setChartParams()
         setLegends()
         setXAxis()
         setYAxis()
         setData(chartModel.chartData)
         setMarkerView(view)
-        setCustomRoundedBar()
+        setCustomRoundedBar()*/
+
+        dataSetColors.add(rgb("#C0392B"))
+        dataSetColors.add(rgb("#884EA0"))
+        dataSetColors.add(rgb("#2471A3"))
+        dataSetColors.add(rgb("#1ABC9C"))
+        dataSetColors.add(rgb("#27AE60"))
+        dataSetColors.add(rgb("#F1C40F"))
+        dataSetColors.add(rgb("#F39C12"))
+        dataSetColors.add(rgb("#E67E22"))
+        dataSetColors.add(rgb("#D35400"))
+        dataSetColors.add(rgb("#2E4053"))
+        dataSetColors.add(rgb("#145A32"))
+        dataSetColors.add(rgb("#0B5345"))
+
+        if (chartModel.chartData is BarChartWrapperModel) {
+            when (chartModel.chartType) {
+                "NegativeBar" -> {
+                    setNegativeMultiBartData(
+                        chartModel.chartType,
+                        chartModel.chartData.xAxisVal,
+                        chartModel.chartData.yAxisVal
+                    )
+                }
+                "MultiBar" -> {
+                    setMultiBartData(
+                        chartModel.chartType,
+                        chartModel.chartData.xAxisVal,
+                        chartModel.chartData.yAxisVal
+                    )
+                }
+                "Bar" -> {
+                    setBartData(
+                        chartModel.chartType,
+                        chartModel.chartData.xAxisVal,
+                        chartModel.chartData.yAxisVal
+                    )
+                }
+                "StackBar" -> {
+                    setStackBartData(
+                        chartModel.chartType,
+                        chartModel.chartData.xAxisVal,
+                        chartModel.chartData.yAxisVal
+                    )
+                }
+            }
+        }
+
+
     }
 
     private fun setClickListener(
@@ -170,4 +224,108 @@ class ChartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         barChartRender.setRadius(15)
         barChart.renderer = barChartRender
     }
+
+    private fun setNegativeMultiBartData(
+        chartTitle: String,
+        xAxisVal: Array<String>,
+        yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>
+    ) {
+        val multiBarChart =
+            BarChartWrapper().multiBarNegativeChart(
+                barChart,
+                xAxisVal,
+                yAxisVal,
+                dataSetColors,
+                chartTitle
+            )
+        multiBarChart.invalidate()
+    }
+
+    private fun setMultiBartData(
+        chartTitle: String,
+        xAxisVal: Array<String>,
+        yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>
+    ) {
+        val multiBarChart =
+            BarChartWrapper().multiBarChart(
+                barChart,
+                xAxisVal,
+                yAxisVal, dataSetColors,
+                chartTitle
+            )
+        multiBarChart.invalidate()
+    }
+
+    private fun setBartData(
+        chartTitle: String,
+        xAxisVal: Array<String>,
+        yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>
+    ) {
+        val multiBarChart =
+            BarChartWrapper().barChart(
+                barChart,
+                xAxisVal,
+                yAxisVal, dataSetColors,
+                chartTitle
+            )
+        multiBarChart.invalidate()
+    }
+
+    private fun setStackBartData(
+        chartTitle: String,
+        xAxisVal: Array<String>,
+        yAxisVal: LinkedHashMap<String, LinkedHashMap<String, FloatArray>>
+    ) {
+        val multiBarChart =
+            BarChartWrapper().barStackChart(
+                barChart,
+                xAxisVal,
+                yAxisVal, dataSetColors,
+                chartTitle
+            )
+        multiBarChart.invalidate()
+    }
+    /*private fun multiBarChartComponentInit() {
+        *//*MultiBarChart*//*
+
+        val yAxisValName: String = ("Units")
+
+        val xAxisVal = arrayOf(
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        )
+        val yAxisVal =
+            floatArrayOf(1.5f, 5.4f, 4f, 8f, 4.3f, 5.1f, 7.6f, 6.7f, 8.9f, 4.8f, 12.1f, 3.5f)
+        val yAxisVal2 =
+            floatArrayOf(-10f, 11f, 13f, 12f, 14f, 9f, 4f, 2f, 8f, 25f, 13f, 2f)
+        val yAxisVal3 = floatArrayOf(2f, 1f, 4f, 5f, 7f, 9f, 4f, 5f, 7f, 6f, 7f, 5f)
+
+        val dataSetColors = ArrayList<Int>()
+        dataSetColors.add(rgb("#C0392B"))
+        dataSetColors.add(rgb("#884EA0"))
+        dataSetColors.add(rgb("#2471A3"))
+        dataSetColors.add(rgb("#1ABC9C"))
+        dataSetColors.add(rgb("#27AE60"))
+        dataSetColors.add(rgb("#F1C40F"))
+        dataSetColors.add(rgb("#F39C12"))
+        dataSetColors.add(rgb("#E67E22"))
+        dataSetColors.add(rgb("#D35400"))
+        dataSetColors.add(rgb("#2E4053"))
+        dataSetColors.add(rgb("#145A32"))
+        dataSetColors.add(rgb("#0B5345"))
+
+        val linkedHashMap = LinkedHashMap<String, FloatArray>()
+        linkedHashMap[yAxisValName + 1] = yAxisVal //String, float[]
+        linkedHashMap[yAxisValName + 2] = yAxisVal2 //String, float[]
+        linkedHashMap[yAxisValName + 3] = yAxisVal3 //String, float[]
+
+        val multiBarChart =
+            BarChartWrapper().multiBarNegativeChart(
+                barChart,
+                xAxisVal,
+                linkedHashMap,
+                dataSetColors,
+                ""
+            )
+        multiBarChart.invalidate()
+    }*/
 }

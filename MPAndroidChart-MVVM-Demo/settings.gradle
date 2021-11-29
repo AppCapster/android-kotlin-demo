@@ -5,6 +5,8 @@ dependencyResolutionManagement {
         mavenCentral()
         maven { url 'https://jitpack.io' }
         jcenter() // Warning: this repository is going to shut down soon
+        maven { url 'https://repo.apxor.com/artifactory/list/libs-release-android/' }
+
     }
 }
 rootProject.name = "MPAndroidChart MVVM"

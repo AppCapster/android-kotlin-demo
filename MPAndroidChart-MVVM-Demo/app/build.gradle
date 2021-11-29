@@ -63,4 +63,33 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    implementation 'com.apxor.androidx:apxor-android-sdk-core:2.7.8@aar'
+    implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
+
+    // Add this to track uninstalls and send push notifications from Apxor dashboard
+    // Note: We don't support firebase-messaging >= 22.0.0 yet
+    implementation('com.apxor.androidx:apxor-android-sdk-push:1.2.5@aar') {
+        exclude group: 'com.google.firebase'
+    }
+
+    // Add these for Realtime Actions and Surveys
+    implementation 'com.apxor.androidx:apxor-android-sdk-qe:1.4.6@aar'
+    implementation 'com.apxor.androidx:apxor-android-sdk-rtm:1.7.5@aar'
+    implementation 'com.apxor.androidx:surveys:1.3.1@aar'
+
+    // Add this to track application crashes
+    implementation 'com.apxor.androidx:apxor-android-crash-reporter:1.0.5@aar'
+
+    // Helper plugin to create walkthroughs
+    implementation 'com.apxor.androidx:wysiwyg:1.2.0@aar'
+
+    // Add this to execute Client Functions
+    implementation 'com.apxor.androidx:apxor-cf:1.0.0@aar'
+
+    // Add this to log events without attributes at runtime
+    implementation 'com.apxor.androidx:jit-log:1.0.0@aar'
+
+    // Getting a "Could not find" error? Make sure that you've added
+    // Apxor's Maven repository to your root-level build.gradle file
 }

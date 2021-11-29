@@ -187,7 +187,7 @@ class BarChartWrapper {
         chart.data = data
         chart.barData.barWidth = barWidth
 
-        val groupEvaluatedSpace = 1f - (barSpace + barWidth) * groupSize
+        val groupEvaluatedSpace = 0.975f - (barSpace + barWidth) * groupSize
         chart.groupBars(0f, groupEvaluatedSpace, barSpace)
 
         return chart
